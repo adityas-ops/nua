@@ -15,7 +15,8 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { colors, shadows } = useTheme();
   const styles = createStyles(colors, shadows);
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
 
   // Calculate prices based on discount
@@ -38,7 +39,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         padding: 10,
       }}
     >
-      <TouchableOpacity style={styles.CardContainer} activeOpacity={0.9} onPress={handlePressCard}>
+      <TouchableOpacity
+        style={styles.CardContainer}
+        activeOpacity={0.9}
+        onPress={handlePressCard}
+      >
         <View style={styles.InnerContainer}>
           <View style={styles.ImageWrapper}>
             <Image source={{ uri: product.thumbnail }} style={styles.Image} />
@@ -69,9 +74,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               )}
             </View>
           </View>
-          
-          <TouchableOpacity 
-            style={styles.AddToCartButton} 
+
+          <TouchableOpacity
+            style={styles.AddToCartButton}
             activeOpacity={0.8}
             onPress={handleAddToCart}
           >
@@ -114,13 +119,13 @@ const createStyles = (colors: any, shadows: any) =>
       position: 'absolute',
       top: 10,
       left: 10,
-      backgroundColor: colors.primary,
+      backgroundColor: colors.badgeColor,
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 16,
     },
     BadgeText: {
-      color: colors.primaryForeground,
+      color: '#fff',
       fontWeight: 'bold',
       fontSize: 10,
     },

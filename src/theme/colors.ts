@@ -25,6 +25,7 @@ export interface ThemeColors {
   chart3: string;
   chart4: string;
   chart5: string;
+  badgeColor: string;
 }
 
 // RN has no CSS box-shadow equivalent — use these with the shadow
@@ -65,6 +66,7 @@ export const lightColors: ThemeColors = {
   chart3: '#104E64',
   chart4: '#FFB900',
   chart5: '#FE9A00',
+  badgeColor: '#0F5132',
 };
 
 export const darkColors: ThemeColors = {
@@ -94,6 +96,7 @@ export const darkColors: ThemeColors = {
   chart3: '#FE9A00',
   chart4: '#AD46FF',
   chart5: '#FF2056',
+  badgeColor: '#0F5132',
 };
 
 export const lightShadows = {

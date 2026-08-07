@@ -68,7 +68,7 @@ const TabNavigator = () => {
           tabBarBadgeStyle: {
             backgroundColor: colors.primary,
             color: colors.primaryForeground,
-            fontSize: 10,
+            fontSize: 8,
           },
         }}
       />
