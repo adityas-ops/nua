@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useColorScheme } from 'react-native';
-import { lightColors, darkColors, ThemeColors } from './colors';
+import { lightColors, darkColors, ThemeColors, lightShadows, darkShadows, ThemeShadow } from './colors';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -8,6 +8,7 @@ interface ThemeContextType {
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
   colors: ThemeColors;
+  shadows: { card: ThemeShadow; accent: ThemeShadow };
   isDark: boolean;
 }
 
@@ -26,9 +27,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     (themeMode === 'system' && systemColorScheme === 'dark');
 
   const colors = isDark ? darkColors : lightColors;
+  const shadows = isDark ? darkShadows : lightShadows;
 
   return (
-    <ThemeContext.Provider value={{ themeMode, setThemeMode, colors, isDark }}>
+    <ThemeContext.Provider value={{ themeMode, setThemeMode, colors, shadows, isDark }}>
       {children}
     </ThemeContext.Provider>
   );

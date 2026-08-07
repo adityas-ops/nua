@@ -11,12 +11,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './src/store/store';
-import { ThemeProvider } from './src/theme/ThemeContext';
+import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
 import AppNavigator from './src/navigation/AppNavigator';
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+function ThemeAwareStatusBar() {
+  const { isDark } = useTheme();
+  return <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />;
+}
 
+function App() {
   return (
     <Provider store={store}>
       <PersistGate
@@ -31,9 +34,7 @@ function App() {
       >
         <ThemeProvider>
           <SafeAreaProvider>
-            <StatusBar
-              barStyle={isDarkMode ? 'dark-content' : 'light-content'}
-            />
+            <ThemeAwareStatusBar />
             <NavigationContainer>
               <AppNavigator />
             </NavigationContainer>
