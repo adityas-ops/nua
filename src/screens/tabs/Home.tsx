@@ -24,6 +24,7 @@ const Home = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
@@ -74,6 +75,12 @@ const Home = () => {
     loadProducts(false);
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await loadProducts(true);
+    setRefreshing(false);
+  };
+
   return (
     <View style={styles.Container}>
       <SafeAreaView style={styles.SafeContainer}>
@@ -82,7 +89,7 @@ const Home = () => {
           <View style={styles.HeaderLeft}>
             {/* Avatar */}
             <View style={styles.Avatar}>
-              <Text style={styles.AvatarText}>A</Text>
+              <Text style={styles.AvatarText}>S</Text>
             </View>
 
             {/* Title & Subtitle */}
@@ -121,6 +128,18 @@ const Home = () => {
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
+            {searchQuery.length > 0 && (
+              <Pressable
+                onPress={() => setSearchQuery('')}
+                style={styles.ClearButton}
+              >
+                <Ionicons
+                  name="close-circle"
+                  size={20}
+                  color={colors.mutedForeground}
+                />
+              </Pressable>
+            )}
           </View>
         </View>
         <View style={styles.ProductContainer}>
@@ -132,6 +151,8 @@ const Home = () => {
                 <ProductCard product={item} />
               </View>
             )}
+            onRefresh={handleRefresh}
+            refreshing={refreshing}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.5}
             keyExtractor={(item, index) => item.id.toString() + index}
@@ -191,7 +212,7 @@ const createStyles = (colors: any) =>
     AvatarText: {
       color: colors.primaryForeground,
       fontSize: 20,
-      fontWeight: '800',
+      fontWeight: '900',
     },
     TitleContainer: {
       justifyContent: 'center',
@@ -232,6 +253,9 @@ const createStyles = (colors: any) =>
       flex: 1,
       fontSize: 16,
       color: colors.foreground,
+    },
+    ClearButton: {
+      padding: 4,
     },
     ProductContainer: {
       flex: 1,

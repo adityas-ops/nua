@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/slices/cartSlice';
+import Ionicons from '@react-native-vector-icons/ionicons/static';
 
 interface ProductCardProps {
   product: Product;
@@ -36,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <View
       style={{
         flex: 1,
-        padding: 10,
+        padding: 8,
       }}
     >
       <TouchableOpacity
@@ -50,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.discountPercentage > 0 && (
               <View style={styles.Badge}>
                 <Text style={styles.BadgeText}>
-                  -{Math.round(product.discountPercentage)}%
+                  {Math.round(product.discountPercentage)}%
                 </Text>
               </View>
             )}
@@ -60,28 +61,31 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Text numberOfLines={1} style={styles.BrandText}>
               {product.brand?.toUpperCase() || 'BRAND'}
             </Text>
-            <Text style={styles.TitleText} numberOfLines={2}>
+            <Text style={styles.TitleText} numberOfLines={1}>
               {product.title}
             </Text>
-            <View style={styles.PriceRow}>
-              <Text style={styles.DiscountedPriceText}>
-                ${Math.round(discountedPrice)}
-              </Text>
-              {product.discountPercentage > 0 && (
-                <Text style={styles.OriginalPriceText}>
-                  ${Math.round(originalPrice)}
+
+            <View style={styles.BottomRow}>
+              <View style={styles.PriceContainer}>
+                <Text style={styles.DiscountedPriceText}>
+                  ${Math.round(discountedPrice)}
                 </Text>
-              )}
+                {product.discountPercentage > 0 && (
+                  <Text style={styles.OriginalPriceText}>
+                    ${Math.round(originalPrice)}
+                  </Text>
+                )}
+              </View>
+
+              <TouchableOpacity
+                style={styles.AddButton}
+                activeOpacity={0.7}
+                onPress={handleAddToCart}
+              >
+                <Ionicons name="add" size={20} color={colors.primary} />
+              </TouchableOpacity>
             </View>
           </View>
-
-          <TouchableOpacity
-            style={styles.AddToCartButton}
-            activeOpacity={0.8}
-            onPress={handleAddToCart}
-          >
-            <Text style={styles.AddToCartText}>Add to Cart</Text>
-          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </View>
@@ -93,8 +97,7 @@ const createStyles = (colors: any, shadows: any) =>
     CardContainer: {
       backgroundColor: colors.card,
       borderRadius: 24,
-      height: 310,
-
+      height: 250,
       ...shadows.card,
     },
     InnerContainer: {
@@ -103,9 +106,9 @@ const createStyles = (colors: any, shadows: any) =>
       overflow: 'hidden',
     },
     ImageWrapper: {
-      height: 140,
+      height: 135,
       width: '100%',
-      backgroundColor: '#F3E1D2', // Peach background from design
+      backgroundColor: '#F3E1D2', // Peach background
       justifyContent: 'center',
       alignItems: 'center',
       position: 'relative',
@@ -130,50 +133,53 @@ const createStyles = (colors: any, shadows: any) =>
       fontSize: 10,
     },
     InfoContainer: {
-      padding: 10,
+      flex: 1,
+      padding: 12,
+      justifyContent: 'space-between',
     },
     BrandText: {
       color: colors.mutedForeground,
-      fontSize: 12,
+      fontSize: 11,
       fontWeight: '600',
-      letterSpacing: 1.5,
-      marginBottom: 8,
+      letterSpacing: 1.2,
+      marginBottom: 2,
     },
     TitleText: {
       color: colors.foreground,
       fontSize: 14,
       fontWeight: 'bold',
-      marginBottom: 8,
-      lineHeight: 20,
+      marginBottom: 4,
+      lineHeight: 18,
     },
-    PriceRow: {
+    BottomRow: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: 'auto',
+    },
+    PriceContainer: {
+      flexDirection: 'row',
+      alignItems: 'baseline',
     },
     DiscountedPriceText: {
       color: colors.foreground,
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: '900',
-      marginRight: 6,
+      marginRight: 4,
     },
     OriginalPriceText: {
       color: colors.mutedForeground,
-      fontSize: 12,
+      fontSize: 11,
       textDecorationLine: 'line-through',
       fontWeight: '500',
     },
-    AddToCartButton: {
-      width: '100%',
-      height: 40,
-      backgroundColor: colors.primary,
+    AddButton: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: colors.primary + '20',
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 'auto',
-    },
-    AddToCartText: {
-      color: colors.primaryForeground,
-      fontWeight: 'bold',
-      fontSize: 14,
     },
   });
 

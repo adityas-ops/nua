@@ -2,35 +2,16 @@ export interface ThemeColors {
   background: string;
   foreground: string;
   card: string;
-  cardForeground: string;
-  popover: string;
-  popoverForeground: string;
   primary: string;
   primaryForeground: string;
   secondary: string;
-  secondaryForeground: string;
   muted: string;
   mutedForeground: string;
-  accent: string;
-  accentForeground: string;
   destructive: string;
-  destructiveForeground: string;
   border: string;
-  input: string;
-  ring: string;
-  surface: string;
-  success: string;
-  chart1: string;
-  chart2: string;
-  chart3: string;
-  chart4: string;
-  chart5: string;
   badgeColor: string;
 }
 
-// RN has no CSS box-shadow equivalent — use these with the shadow
-// props directly (iOS: shadowColor/shadowOffset/shadowOpacity/shadowRadius,
-// Android: elevation).
 export interface ThemeShadow {
   shadowColor: string;
   shadowOffset: { width: number; height: number };
@@ -43,29 +24,13 @@ export const lightColors: ThemeColors = {
   background: '#FCFAF6',
   foreground: '#19120D',
   card: '#FFFFFF',
-  cardForeground: '#19120D',
-  popover: '#FFFFFF',
-  popoverForeground: '#19120D',
   primary: '#EE583E',
   primaryForeground: '#FFFDFA',
   secondary: '#F5EFE9',
-  secondaryForeground: '#291F18',
   muted: '#F5EFE9',
   mutedForeground: '#7B6F66',
-  accent: '#FFE6DC',
-  accentForeground: '#971D08',
   destructive: '#E7000B',
-  destructiveForeground: '#F8FAFC',
   border: '#E6E2DD',
-  input: '#E6E2DD',
-  ring: '#EE583E',
-  surface: '#FFFFFF',
-  success: '#349D62',
-  chart1: '#F54900',
-  chart2: '#009689',
-  chart3: '#104E64',
-  chart4: '#FFB900',
-  chart5: '#FE9A00',
   badgeColor: '#0F5132',
 };
 
@@ -73,29 +38,13 @@ export const darkColors: ThemeColors = {
   background: '#110C09',
   foreground: '#F7F3EE',
   card: '#1E1814',
-  cardForeground: '#F7F3EE',
-  popover: '#1E1814',
-  popoverForeground: '#F7F3EE',
   primary: '#FA785B',
   primaryForeground: '#150A07',
   secondary: '#29231E',
-  secondaryForeground: '#F7F3EE',
   muted: '#29231E',
   mutedForeground: '#A59D95',
-  accent: '#41251E',
-  accentForeground: '#FFA37D',
   destructive: '#FF6467',
-  destructiveForeground: '#F8FAFC',
   border: 'rgba(255, 255, 255, 0.10)',
-  input: 'rgba(255, 255, 255, 0.14)',
-  ring: '#FA785B',
-  surface: '#1E1814',
-  success: '#57BC80',
-  chart1: '#1447E6',
-  chart2: '#00BC7D',
-  chart3: '#FE9A00',
-  chart4: '#AD46FF',
-  chart5: '#FF2056',
   badgeColor: '#0F5132',
 };
 

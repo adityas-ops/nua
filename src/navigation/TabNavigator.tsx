@@ -66,7 +66,7 @@ const TabNavigator = () => {
           // animation: 'shift',
           tabBarBadge: cartCount > 0 ? cartCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.destructive,
             color: colors.primaryForeground,
             fontSize: 8,
           },
