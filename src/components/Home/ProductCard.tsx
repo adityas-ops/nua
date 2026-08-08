@@ -8,6 +8,7 @@ import { RootStackParamList } from '../../navigation/AppNavigator';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/slices/cartSlice';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
+import Toast from 'react-native-toast-message';
 import { Analytics } from '../../services/analytics';
 
 interface ProductCardProps {
@@ -31,8 +32,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   const handleAddToCart = () => {
-    Analytics.logEvent('add_to_cart', { productId: product.id, productName: product.title, source: 'ProductCard' });
+    Analytics.logEvent('add_to_cart', {
+      productId: product.id,
+      productName: product.title,
+      source: 'ProductCard',
+    });
     dispatch(addToCart({ ...product, count: 1 }));
+    Toast.show({
+      type: 'success',
+      text1: 'Product added',
+      position: 'bottom',
+      topOffset: 60,
+      visibilityTime: 1000,
+      autoHide: true,
+      bottomOffset: 60,
+    });
   };
 
   return (

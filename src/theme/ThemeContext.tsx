@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { lightColors, darkColors, ThemeColors, lightShadows, darkShadows, ThemeShadow } from './colors';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
@@ -20,7 +21,30 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const systemColorScheme = useColorScheme();
-  const [themeMode, setThemeMode] = useState<ThemeMode>('light');
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('light');
+
+  useEffect(() => {
+    const loadTheme = async () => {
+      try {
+        const storedTheme = await AsyncStorage.getItem('@app_theme_mode');
+        if (storedTheme) {
+          setThemeModeState(storedTheme as ThemeMode);
+        }
+      } catch (e) {
+        // console.error(e);
+      }
+    };
+    loadTheme();
+  }, []);
+
+  const setThemeMode = async (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    try {
+      await AsyncStorage.setItem('@app_theme_mode', mode);
+    } catch (e) {
+      // console.error(e);
+    }
+  };
 
   const isDark =
     themeMode === 'dark' ||

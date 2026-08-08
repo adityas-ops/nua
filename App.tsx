@@ -6,11 +6,14 @@ import {
   ActivityIndicator,
   View,
   AppState,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import Toast from 'react-native-toast-message';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { store, persistor } from './src/store/store';
 import { queryClient, asyncStoragePersister } from './src/services/queryClient';
@@ -18,6 +21,49 @@ import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useNetworkStatus } from './src/hooks/useNetworkStatus';
 import { Analytics } from './src/services/analytics';
+import Ionicons from '@react-native-vector-icons/ionicons/static';
+
+const toastConfig = {
+  success: (props: any) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#10B981',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 999,
+        width: '90%',
+        maxWidth: 400,
+        justifyContent: 'space-between',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      }}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+        <Ionicons
+          name="checkmark-circle"
+          size={24}
+          color="#FFF"
+          style={{ marginRight: 10 }}
+        />
+        <Text style={{ color: '#FFF', fontSize: 16, fontWeight: '600' }}>
+          {props.text1}
+        </Text>
+      </View>
+      <TouchableOpacity
+        onPress={() => Toast.hide()}
+        style={{ padding: 4 }}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        <Ionicons name="close" size={24} color="#FFF" />
+      </TouchableOpacity>
+    </View>
+  ),
+};
 
 function ThemeAwareStatusBar() {
   const { isDark, colors } = useTheme();
@@ -59,7 +105,7 @@ function App() {
           client={queryClient}
           persistOptions={{
             persister: asyncStoragePersister,
-            maxAge: 1000 * 60 * 60 * 24, // 24 hours — match gcTime
+            maxAge: 1000 * 60 * 60 * 24,
           }}
         >
           <ThemeProvider>
@@ -72,6 +118,7 @@ function App() {
           </ThemeProvider>
         </PersistQueryClientProvider>
       </PersistGate>
+      <Toast config={toastConfig} position="bottom" bottomOffset={60} />
     </Provider>
   );
 }

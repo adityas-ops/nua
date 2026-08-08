@@ -5,14 +5,12 @@ import {
   Pressable,
   TextInput,
   ActivityIndicator,
-  Keyboard,
 } from 'react-native';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../theme/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
 import ProductCard from '../../components/Home/ProductCard';
-import { Product } from '../../types/product';
 import { FlashList } from '@shopify/flash-list';
 import useDebounce from '../../hooks/useDebounce';
 import { getProducts, searchProducts } from '../../api/productApi';
@@ -151,7 +149,7 @@ const Home = () => {
             data={products}
             numColumns={2}
             renderItem={({ item, index }) => (
-              <View>
+              <View key={index}>
                 <ProductCard product={item} />
               </View>
             )}
@@ -249,6 +247,8 @@ const createStyles = (colors: any) =>
       borderRadius: 24,
       paddingHorizontal: 16,
       height: 52,
+      borderWidth: 1,
+      borderColor: colors.border,
     },
     SearchIcon: {
       marginRight: 10,
@@ -263,7 +263,7 @@ const createStyles = (colors: any) =>
     },
     ProductContainer: {
       flex: 1,
-      paddingTop: 20,
+      paddingTop: 10,
     },
     EmptyText: {
       textAlign: 'center',

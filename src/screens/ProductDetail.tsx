@@ -16,6 +16,7 @@ import { Product } from '../types/product';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/slices/cartSlice';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
+import Toast from 'react-native-toast-message';
 import { useQuery } from '@tanstack/react-query';
 import { Analytics } from '../services/analytics';
 
@@ -50,14 +51,25 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (product) {
-      Analytics.logEvent('product_viewed', { productId: product.id, productName: product.title });
+      Analytics.logEvent('product_viewed', {
+        productId: product.id,
+        productName: product.title,
+      });
     }
   }, [product]);
 
   const handleAddToCart = () => {
     if (product) {
-      Analytics.logEvent('add_to_cart', { productId: product.id, productName: product.title });
+      Analytics.logEvent('add_to_cart', {
+        productId: product.id,
+        productName: product.title,
+      });
       dispatch(addToCart({ ...product, count: 1 }));
+      Toast.show({
+        type: 'success',
+        text1: 'Product added',
+        position: 'bottom',
+      });
     }
   };
 
@@ -79,12 +91,15 @@ const ProductDetail = () => {
 
   return (
     <View style={styles.Container}>
-      <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1 }}>
+      <SafeAreaView
+        edges={['top', 'left', 'right', 'bottom']}
+        style={{ flex: 1 }}
+      >
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          <ProductHeaderImage thumbnail={product.thumbnail} />
+          <ProductHeaderImage images={product.images && product.images.length > 0 ? product.images : [product.thumbnail]} />
 
           <ProductTitleInfo
             brand={product.brand}
