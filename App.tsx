@@ -43,7 +43,10 @@ function App() {
       >
         <PersistQueryClientProvider
           client={queryClient}
-          persistOptions={{ persister: asyncStoragePersister }}
+          persistOptions={{
+            persister: asyncStoragePersister,
+            maxAge: 1000 * 60 * 60 * 24, // 24 hours — match gcTime
+          }}
         >
           <ThemeProvider>
             <SafeAreaProvider>

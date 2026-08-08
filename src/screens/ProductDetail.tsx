@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTheme } from '../theme/ThemeContext';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -16,6 +16,7 @@ import { Product } from '../types/product';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/slices/cartSlice';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
+import { useQuery } from '@tanstack/react-query';
 
 import ProductHeaderImage from '../components/productDetails/ProductHeaderImage';
 import ProductTitleInfo from '../components/productDetails/ProductTitleInfo';
@@ -41,22 +42,10 @@ const ProductDetail = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const data = await getProductById(id);
-        setProduct(data);
-      } catch (error) {
-        console.error('Failed to fetch product', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProduct();
-  }, [id]);
+  const { data: product, isLoading: loading } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => getProductById(id),
+  });
 
   const handleAddToCart = () => {
     if (product) {

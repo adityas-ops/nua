@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Keyboard,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTheme } from '../../theme/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
@@ -16,69 +16,66 @@ import { Product } from '../../types/product';
 import { FlashList } from '@shopify/flash-list';
 import useDebounce from '../../hooks/useDebounce';
 import { getProducts, searchProducts } from '../../api/productApi';
+import { useInfiniteQuery } from '@tanstack/react-query';
+
+const LIMIT = 10;
 
 const Home = () => {
   const { colors, setThemeMode, isDark } = useTheme();
   const styles = createStyles(colors);
 
-  const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [skip, setSkip] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-
   const debouncedSearch = useDebounce(searchQuery, 500);
-  const limit = 10;
 
-  const loadProducts = async (isReset = false) => {
-    if (loading || (!hasMore && !isReset)) return;
+  const isSearching = debouncedSearch.trim().length > 0;
 
-    setLoading(true);
-    const currentSkip = isReset ? 0 : skip;
-
-    try {
-      let response;
-      if (debouncedSearch.trim().length > 0) {
-        response = await searchProducts({
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useInfiniteQuery({
+    queryKey: isSearching
+      ? ['products', 'search', debouncedSearch]
+      : ['products', 'list'],
+    queryFn: async ({ pageParam = 0 }) => {
+      if (isSearching) {
+        return searchProducts({
           query: debouncedSearch,
-          limit,
-          skip: currentSkip,
+          limit: LIMIT,
+          skip: pageParam,
         });
-      } else {
-        response = await getProducts({ limit, skip: currentSkip });
       }
-
-      setProducts(prev =>
-        isReset ? response.products : [...prev, ...response.products],
+      return getProducts({ limit: LIMIT, skip: pageParam });
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalFetched = allPages.reduce(
+        (sum, page) => sum + page.products.length,
+        0,
       );
-      setSkip(currentSkip + limit);
-
-      if (response.products.length < limit || response.products.length === 0) {
-        setHasMore(false);
-      } else {
-        setHasMore(true);
+      if (lastPage.products.length < LIMIT || totalFetched >= lastPage.total) {
+        return undefined;
       }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
+      return totalFetched;
+    },
+    initialPageParam: 0,
+  });
+
+  const products = useMemo(() => {
+    return data?.pages.flatMap(page => page.products) ?? [];
+  }, [data]);
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    loadProducts(true);
-  }, [debouncedSearch]);
-
-  const handleLoadMore = () => {
-    loadProducts(false);
-  };
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await loadProducts(true);
-    setRefreshing(false);
+  const handleRefresh = () => {
+    refetch();
   };
 
   return (
@@ -152,13 +149,13 @@ const Home = () => {
               </View>
             )}
             onRefresh={handleRefresh}
-            refreshing={refreshing}
+            refreshing={isRefetching && !isFetchingNextPage}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.5}
             keyExtractor={(item, index) => item.id.toString() + index}
             showsVerticalScrollIndicator={false}
             ListFooterComponent={() =>
-              loading ? (
+              isFetchingNextPage || isLoading ? (
                 <ActivityIndicator
                   size="large"
                   color={colors.primary}
@@ -167,7 +164,7 @@ const Home = () => {
               ) : null
             }
             ListEmptyComponent={() =>
-              !loading ? (
+              !isLoading ? (
                 <Text style={styles.EmptyText}>No products found.</Text>
               ) : null
             }
