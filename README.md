@@ -6,13 +6,13 @@ Welcome to the Nua E-Commerce application! This is a modern, fully-featured Reac
 
 Here is a quick look at the application in action:
 
-<div style="display: flex; flex-direction: row; gap: 10px;">
-  <img src="src/assets/screenshots/1.jpeg" alt="Home Screen" width="300"/>
-  <img src="src/assets/screenshots/2.jpeg" alt="Product Details" width="300"/>
-  <img src="src/assets/screenshots/3.jpeg" alt="Product Details" width="300"/>
-  <img src="src/assets/screenshots/4.jpeg" alt="Product Details" width="300"/>
-  <img src="src/assets/screenshots/5.jpeg" alt="Product Details" width="300"/>
-  <img src="src/assets/screenshots/6.jpeg" alt="Product Details" width="300"/>
+<div style="display: flex; flex-direction: row; overflow-x: auto; white-space: nowrap; gap: 10px; padding-bottom: 10px;">
+  <img src="src/assets/screenshots/1.jpeg" alt="Home Screen" width="16%"/>
+  <img src="src/assets/screenshots/2.jpeg" alt="Product Details" width="16%"/>
+  <img src="src/assets/screenshots/3.jpeg" alt="Product Details" width="16%"/>
+  <img src="src/assets/screenshots/4.jpeg" alt="Product Details" width="16%"/>
+  <img src="src/assets/screenshots/5.jpeg" alt="Product Details" width="16%"/>
+  <img src="src/assets/screenshots/6.jpeg" alt="Product Details" width="16%"/>
 </div>
 
 ## Try it out!
