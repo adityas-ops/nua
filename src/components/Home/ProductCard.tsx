@@ -8,6 +8,7 @@ import { RootStackParamList } from '../../navigation/AppNavigator';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/slices/cartSlice';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
+import { Analytics } from '../../services/analytics';
 
 interface ProductCardProps {
   product: Product;
@@ -30,6 +31,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   const handleAddToCart = () => {
+    Analytics.logEvent('add_to_cart', { productId: product.id, productName: product.title, source: 'ProductCard' });
     dispatch(addToCart({ ...product, count: 1 }));
   };
 

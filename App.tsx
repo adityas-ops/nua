@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StatusBar,
   StyleSheet,
   useColorScheme,
   ActivityIndicator,
   View,
+  AppState,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,6 +17,7 @@ import { queryClient, asyncStoragePersister } from './src/services/queryClient';
 import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useNetworkStatus } from './src/hooks/useNetworkStatus';
+import { Analytics } from './src/services/analytics';
 
 function ThemeAwareStatusBar() {
   const { isDark, colors } = useTheme();
@@ -29,6 +31,18 @@ function ThemeAwareStatusBar() {
 }
 
 function App() {
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'background') {
+        Analytics.logEvent('app_backgrounded');
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <Provider store={store}>
       <PersistGate

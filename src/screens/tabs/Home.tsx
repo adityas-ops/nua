@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Keyboard,
 } from 'react-native';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../theme/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
@@ -17,6 +17,7 @@ import { FlashList } from '@shopify/flash-list';
 import useDebounce from '../../hooks/useDebounce';
 import { getProducts, searchProducts } from '../../api/productApi';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { Analytics } from '../../services/analytics';
 
 const LIMIT = 10;
 
@@ -28,6 +29,12 @@ const Home = () => {
   const debouncedSearch = useDebounce(searchQuery, 500);
 
   const isSearching = debouncedSearch.trim().length > 0;
+
+  useEffect(() => {
+    if (isSearching) {
+      Analytics.logEvent('search_performed', { query: debouncedSearch });
+    }
+  }, [debouncedSearch, isSearching]);
 
   const {
     data,

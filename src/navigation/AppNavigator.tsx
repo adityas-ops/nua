@@ -4,11 +4,13 @@ import TabNavigator from './TabNavigator';
 import ProductDetail from '../screens/ProductDetail';
 import { useTheme } from '../theme/ThemeContext';
 import Policy from '../screens/Policy';
+import LogsScreen from '../screens/LogsScreen';
 
 export type RootStackParamList = {
   Tabs: undefined;
   ProductDetail: { id: number };
   ReturnPolicy: undefined;
+  Logs: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -30,6 +32,11 @@ const AppNavigator = () => {
         name="ReturnPolicy"
         component={Policy}
         options={{ title: 'Return Policy', headerShown: false }}
+      />
+      <Stack.Screen
+        name="Logs"
+        component={LogsScreen}
+        options={{ title: 'Analytics Logs', headerShown: false }}
       />
     </Stack.Navigator>
   );

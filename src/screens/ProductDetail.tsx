@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '../theme/ThemeContext';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/slices/cartSlice';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
 import { useQuery } from '@tanstack/react-query';
+import { Analytics } from '../services/analytics';
 
 import ProductHeaderImage from '../components/productDetails/ProductHeaderImage';
 import ProductTitleInfo from '../components/productDetails/ProductTitleInfo';
@@ -47,8 +48,15 @@ const ProductDetail = () => {
     queryFn: () => getProductById(id),
   });
 
+  useEffect(() => {
+    if (product) {
+      Analytics.logEvent('product_viewed', { productId: product.id, productName: product.title });
+    }
+  }, [product]);
+
   const handleAddToCart = () => {
     if (product) {
+      Analytics.logEvent('add_to_cart', { productId: product.id, productName: product.title });
       dispatch(addToCart({ ...product, count: 1 }));
     }
   };

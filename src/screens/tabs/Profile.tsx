@@ -3,10 +3,14 @@ import React from 'react';
 import { useTheme } from '../../theme/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/ionicons/static';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/AppNavigator';
 
 const Profile = () => {
   const { colors, shadows, setThemeMode, isDark } = useTheme();
   const styles = createStyles(colors, shadows);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const handleComingSoon = () => {
     Alert.alert('Coming Soon', 'This feature will be available in a future update.');
@@ -36,13 +40,12 @@ const Profile = () => {
           </View>
 
           {/* Options */}
-          <TouchableOpacity style={styles.OptionCard} onPress={handleComingSoon} activeOpacity={0.7}>
+          <TouchableOpacity style={styles.OptionCard} onPress={() => navigation.navigate('Logs')} activeOpacity={0.7}>
             <View style={styles.OptionLeft}>
-              <Ionicons name="cube-outline" size={20} color={colors.primary} />
-              <Text style={styles.OptionTitle}>Orders</Text>
+              <Ionicons name="document-text-outline" size={20} color={colors.primary} />
+              <Text style={styles.OptionTitle}>Check Logs</Text>
             </View>
             <View style={styles.OptionRight}>
-              <Text style={styles.OptionValue}>2 in transit</Text>
               <Ionicons name="chevron-forward" size={16} color={colors.mutedForeground} />
             </View>
           </TouchableOpacity>
